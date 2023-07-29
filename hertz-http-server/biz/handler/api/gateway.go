@@ -4,14 +4,23 @@ package api
 
 import (
 	"context"
+	"io/ioutil"
+	"log"
 
 	api "github.com/Lortals/111cloudwego-apigateway/hertz-http-server/biz/model/api"
 	additionService "github.com/Lortals/111cloudwego-apigateway/microservices/addition-service/kitex_gen/addition/management"
 	divisionService "github.com/Lortals/111cloudwego-apigateway/microservices/division-service/kitex_gen/division/api"
 	multiplicationService "github.com/Lortals/111cloudwego-apigateway/microservices/multiplication-service/kitex_gen/multiplication/management"
+	"github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/demo"
 	"github.com/Lortals/111cloudwego-apigateway/utils"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/adaptor"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	kclient "github.com/cloudwego/kitex/client"
+	"github.com/cloudwego/kitex/client/genericclient"
+	"github.com/cloudwego/kitex/pkg/generic"
+	"github.com/cloudwego/kitex/pkg/loadbalance"
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 // AddNumbers .
@@ -143,38 +152,101 @@ func DivideNumbers(ctx context.Context, c *app.RequestContext) {
 // @router /student/register [POST]
 func RegisterStudent(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.RegisterStudentRequest
+	var req demo.Student
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := &api.RegisterStudentResponse{
-		Status: "success",
-		ID:     "10001",
+	//泛化调用的register
+	cli := initGenericClient()
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		panic("get http req failed")
 	}
-
+	customReq, err := generic.FromHTTPRequest(httpReq)
+	if err != nil {
+		panic("get custom req failed")
+	}
+	resp, err := cli.GenericCall(ctx, "Register", customReq)
+	if err != nil {
+		panic("generic call failed" + err.Error())
+	}
 	c.JSON(consts.StatusOK, resp)
 }
 
 // GetStudent .
-// @router /student/get [POST]
+// @router /student/get [GET]
 func GetStudent(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.GetStudentRequest
+	var req demo.QueryReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := &api.GetStudentResponse{
-		Name:    "Xiao Hong",
-		Age:     "18",
-		Email:   "xiaohong@tsinghua.edu.cn",
-		Address: "Tsinghua University, 30 Shuangqing Road, Haidian District, Beijing 100084, China.",
+	// 泛化调用的query
+	cli := initGenericClient()
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		panic("get http req failed")
+	}
+	customReq, err := generic.FromHTTPRequest(httpReq)
+	if err != nil {
+		panic("get custom req failed")
+	}
+	resp, err := cli.GenericCall(ctx, "Query", customReq)
+	if err != nil {
+		panic("generic call failed" + err.Error())
+	}
+	realResp := resp.(*generic.HTTPResponse)
+	c.JSON(consts.StatusOK, realResp.Body)
+}
+
+// 泛化调用
+func initGenericClient() genericclient.Client {
+	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2379"})
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	c.JSON(consts.StatusOK, resp)
+	//基于内存解析 IDL，支持热更新
+	path := "../student.thrift"
+	cont, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	content := string(cont[:])
+
+	includes := map[string]string{
+		path: content,
+	}
+
+	p, err := generic.NewThriftContentProvider(content, includes)
+	if err != nil {
+		panic(err)
+	}
+
+	// dynamic update
+	err = p.UpdateIDL(content, includes)
+	if err != nil {
+		panic("UpdateIDL failed")
+	}
+
+	// 构造HTTP类型的泛化调用
+	g, err := generic.HTTPThriftGeneric(p)
+	if err != nil {
+		panic(err)
+	}
+
+	cli, err := genericclient.NewClient("student", g,
+		kclient.WithResolver(r),
+		kclient.WithLoadBalancer(loadbalance.NewWeightedRandomBalancer()))
+	if err != nil {
+		panic(err)
+	}
+
+	return cli
 }
