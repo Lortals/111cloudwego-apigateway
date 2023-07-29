@@ -3,7 +3,7 @@
 package additionmanagement
 
 import (
-	management "github.com/ararchch/api-gateway/microservices/addition-service/kitex_gen/addition/management"
+	management "github.com/Lortals/111cloudwego-apigateway/microservices/addition-service/kitex_gen/addition/management"
 	server "github.com/cloudwego/kitex/server"
 )
 

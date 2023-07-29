@@ -4,7 +4,7 @@ package studentmanagement
 
 import (
 	"context"
-	api "github.com/ararchch/api-gateway/microservices/student_service/kitex_gen/student/api"
+	api "github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/student/api"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )

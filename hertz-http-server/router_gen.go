@@ -3,7 +3,7 @@
 package main
 
 import (
-	router "github.com/ararchch/api-gateway/hertz-http-server/biz/router"
+	router "github.com/Lortals/111cloudwego-apigateway/hertz-http-server/biz/router"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 

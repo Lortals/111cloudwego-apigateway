@@ -4,7 +4,7 @@ package additionmanagement
 
 import (
 	"context"
-	management "github.com/ararchch/api-gateway/microservices/addition-service/kitex_gen/addition/management"
+	management "github.com/Lortals/111cloudwego-apigateway/microservices/addition-service/kitex_gen/addition/management"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )

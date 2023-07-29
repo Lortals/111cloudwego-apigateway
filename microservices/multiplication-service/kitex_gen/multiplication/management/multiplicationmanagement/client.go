@@ -4,7 +4,7 @@ package multiplicationmanagement
 
 import (
 	"context"
-	management "github.com/ararchch/api-gateway/microservices/multiplication-service/kitex_gen/multiplication/management"
+	management "github.com/Lortals/111cloudwego-apigateway/microservices/multiplication-service/kitex_gen/multiplication/management"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )

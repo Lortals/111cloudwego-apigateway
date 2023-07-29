@@ -5,11 +5,11 @@ package api
 import (
 	"context"
 
-	api "github.com/ararchch/api-gateway/hertz-http-server/biz/model/api"
-	additionService "github.com/ararchch/api-gateway/microservices/addition-service/kitex_gen/addition/management"
-	divisionService "github.com/ararchch/api-gateway/microservices/division-service/kitex_gen/division/api"
-	multiplicationService "github.com/ararchch/api-gateway/microservices/multiplication-service/kitex_gen/multiplication/management"
-	"github.com/ararchch/api-gateway/utils"
+	api "github.com/Lortals/111cloudwego-apigateway/hertz-http-server/biz/model/api"
+	additionService "github.com/Lortals/111cloudwego-apigateway/microservices/addition-service/kitex_gen/addition/management"
+	divisionService "github.com/Lortals/111cloudwego-apigateway/microservices/division-service/kitex_gen/division/api"
+	multiplicationService "github.com/Lortals/111cloudwego-apigateway/microservices/multiplication-service/kitex_gen/multiplication/management"
+	"github.com/Lortals/111cloudwego-apigateway/utils"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
@@ -152,7 +152,7 @@ func RegisterStudent(ctx context.Context, c *app.RequestContext) {
 
 	resp := &api.RegisterStudentResponse{
 		Status: "success",
-		ID: "10001",
+		ID:     "10001",
 	}
 
 	c.JSON(consts.StatusOK, resp)
@@ -170,9 +170,9 @@ func GetStudent(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp := &api.GetStudentResponse{
-		Name: "Xiao Hong",
-		Age: "18",
-		Email: "xiaohong@tsinghua.edu.cn",
+		Name:    "Xiao Hong",
+		Age:     "18",
+		Email:   "xiaohong@tsinghua.edu.cn",
 		Address: "Tsinghua University, 30 Shuangqing Road, Haidian District, Beijing 100084, China.",
 	}
 

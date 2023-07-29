@@ -3,7 +3,7 @@
 package divisionmanagement
 
 import (
-	api "github.com/ararchch/api-gateway/microservices/division-service/kitex_gen/division/api"
+	api "github.com/Lortals/111cloudwego-apigateway/microservices/division-service/kitex_gen/division/api"
 	server "github.com/cloudwego/kitex/server"
 )
 

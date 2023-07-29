@@ -1,4 +1,4 @@
-module github.com/ararchch/api-gateway
+module github.com/Lortals/111cloudwego-apigateway
 
 go 1.19
 

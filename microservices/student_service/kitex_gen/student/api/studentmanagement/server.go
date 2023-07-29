@@ -2,7 +2,7 @@
 package studentmanagement
 
 import (
-	api "github.com/ararchch/api-gateway/microservices/student_service/kitex_gen/student/api"
+	api "github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/student/api"
 	server "github.com/cloudwego/kitex/server"
 )
 

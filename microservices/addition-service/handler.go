@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	management "github.com/ararchch/api-gateway/microservices/addition-service/kitex_gen/addition/management"
+	management "github.com/Lortals/111cloudwego-apigateway/microservices/addition-service/kitex_gen/addition/management"
 )
 
 // AdditionManagementImpl implements the last service interface defined in the IDL.

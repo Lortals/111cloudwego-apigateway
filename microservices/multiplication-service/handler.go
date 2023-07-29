@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	management "github.com/ararchch/api-gateway/microservices/multiplication-service/kitex_gen/multiplication/management"
+	management "github.com/Lortals/111cloudwego-apigateway/microservices/multiplication-service/kitex_gen/multiplication/management"
 )
 
 // MultiplicationManagementImpl implements the last service interface defined in the IDL.
