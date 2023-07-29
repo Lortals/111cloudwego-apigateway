@@ -3,7 +3,7 @@ package studentservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	demo "github.com/xueyyyyyyu/rpcsvr/kitex_gen/demo"
+	demo "github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/demo"
 )
 
 // NewServer creates a server.Server with the given handler and options.

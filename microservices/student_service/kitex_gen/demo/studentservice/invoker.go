@@ -4,7 +4,7 @@ package studentservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	demo "github.com/xueyyyyyyu/rpcsvr/kitex_gen/demo"
+	demo "github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/demo"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

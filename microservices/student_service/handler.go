@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"errors"
-	demo "github.com/xueyyyyyyu/rpcsvr/kitex_gen/demo"
 	"sync"
+
+	demo "github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/demo"
 )
 
 // StudentServiceImpl implements the last service interface defined in the IDL.
@@ -43,23 +44,8 @@ func (s *StudentServiceImpl) Register(ctx context.Context, student *demo.Student
 
 // Query implements the StudentServiceImpl interface.
 func (s *StudentServiceImpl) Query(ctx context.Context, req *demo.QueryReq) (resp *demo.Student, err error) {
-	s.mu.Lock()         // Lock the mutex before modifying the map
-	defer s.mu.Unlock() // Unlock the mutex after the function exits
-
-	// rpc query
-	/*resp = &demo.Student{
-		Id:   1,
-		Name: "XueYu",
-		College: &demo.College{
-			Name:    "SE",
-			Address: "NJU",
-		},
-		Email: []string{
-			"211250052@smail.nju.edu.cn",
-		},
-	}*/
-
-	// fmt.Println(id2Student)
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	student, found := id2Student[int(req.Id)]
 	if found {
