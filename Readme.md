@@ -57,7 +57,7 @@ $ thriftgo --version
 ##### 下载代码
 从github获取代码
 ```shell
-$ git clone https://github.com/ararchch/api-gateway.git
+$ git clone https://github.com/Lortals/111cloudwego-apigateway.git
 ```
 
 ##### 运行项目
