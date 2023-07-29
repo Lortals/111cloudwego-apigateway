@@ -213,7 +213,7 @@ func initGenericClient() genericclient.Client {
 	}
 
 	//基于内存解析 IDL，支持热更新
-	path := "../student.thrift"
+	path := "..thrift-idl/student.thrift"
 	cont, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
