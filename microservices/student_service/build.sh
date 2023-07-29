@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-RUN_NAME="Student"
+RUN_NAME="student.rpc"
 
 mkdir -p output/bin
 cp script/* output/

@@ -2,27 +2,73 @@ package main
 
 import (
 	"context"
-
-	api "github.com/Lortals/111cloudwego-apigateway/microservices/student_service/kitex_gen/student/api"
+	"errors"
+	demo "github.com/xueyyyyyyu/rpcsvr/kitex_gen/demo"
+	"sync"
 )
 
-// StudentManagementImpl implements the last service interface defined in the IDL.
-type StudentManagementImpl struct{}
-
-// RegisterStudent implements the StudentManagementImpl interface.
-func (s *StudentManagementImpl) RegisterStudent(ctx context.Context, req *api.RegisterStudentRequest) (resp *api.RegisterStudentResponse, err error) {
-	return &api.RegisterStudentResponse{
-		Status: "success",
-		Id:     "1",
-	}, nil
+// StudentServiceImpl implements the last service interface defined in the IDL.
+type StudentServiceImpl struct {
+	mu sync.RWMutex // Define a mutex to protect id2Student
 }
 
-// GetStudent implements the StudentManagementImpl interface.
-func (s *StudentManagementImpl) GetStudent(ctx context.Context, req *api.GetStudentRequest) (resp *api.GetStudentResponse, err error) {
-	return &api.GetStudentResponse{
-		Name:    "Xiao Hong",
-		Age:     "18",
-		Email:   "xiaohong@tsinghua.edu.cn",
-		Address: "Tsinghua University, 30 Shuangqing Road, Haidian District, Beijing 100084, China.",
-	}, nil
+// map 缓存
+var id2Student = map[int]demo.Student{}
+
+// Register implements the StudentServiceImpl interface.
+func (s *StudentServiceImpl) Register(ctx context.Context, student *demo.Student) (resp *demo.RegisterResp, err error) {
+	s.mu.Lock()         // Lock the mutex before modifying the map
+	defer s.mu.Unlock() // Unlock the mutex after the function exits
+
+	// rpc register
+	id := int(student.Id)
+	_, found := id2Student[id]
+	if found {
+		resp = &demo.RegisterResp{
+			Success: false,
+			Message: "Student ID already exists.",
+		}
+		return
+	}
+
+	id2Student[id] = *student
+	resp = &demo.RegisterResp{
+		Success: true,
+		Message: "Student information added successfully.",
+	}
+
+	// fmt.Println(id2Student)
+	return
+}
+
+// Query implements the StudentServiceImpl interface.
+func (s *StudentServiceImpl) Query(ctx context.Context, req *demo.QueryReq) (resp *demo.Student, err error) {
+	s.mu.Lock()         // Lock the mutex before modifying the map
+	defer s.mu.Unlock() // Unlock the mutex after the function exits
+
+	// rpc query
+	/*resp = &demo.Student{
+		Id:   1,
+		Name: "XueYu",
+		College: &demo.College{
+			Name:    "SE",
+			Address: "NJU",
+		},
+		Email: []string{
+			"211250052@smail.nju.edu.cn",
+		},
+	}*/
+
+	// fmt.Println(id2Student)
+
+	student, found := id2Student[int(req.Id)]
+	if found {
+		resp = &student
+	} else {
+		err = errors.New("not found")
+	}
+
+	// fmt.Println(resp)
+
+	return
 }
