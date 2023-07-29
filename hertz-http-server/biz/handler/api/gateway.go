@@ -150,7 +150,7 @@ func DivideNumbers(ctx context.Context, c *app.RequestContext) {
 
 // RegisterStudent .
 // @router /student/register [POST]
-func RegisterStudent(ctx context.Context, c *app.RequestContext) {
+func Register(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req demo.Student
 	err = c.BindAndValidate(&req)
@@ -178,7 +178,7 @@ func RegisterStudent(ctx context.Context, c *app.RequestContext) {
 
 // GetStudent .
 // @router /student/get [GET]
-func GetStudent(ctx context.Context, c *app.RequestContext) {
+func Query(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req demo.QueryReq
 	err = c.BindAndValidate(&req)
