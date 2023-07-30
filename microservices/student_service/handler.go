@@ -27,7 +27,7 @@ func (s *StudentServiceImpl) Register(ctx context.Context, student *demo.Student
 	if found {
 		resp = &demo.RegisterResp{
 			Success: false,
-			Message: "Student ID already exists.",
+			Message: "This ID already exists.",
 		}
 		return
 	}
@@ -35,7 +35,7 @@ func (s *StudentServiceImpl) Register(ctx context.Context, student *demo.Student
 	id2Student[id] = *student
 	resp = &demo.RegisterResp{
 		Success: true,
-		Message: "Student information added successfully.",
+		Message: "Information added successfully.",
 	}
 
 	// fmt.Println(id2Student)

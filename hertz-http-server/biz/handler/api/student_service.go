@@ -18,7 +18,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/generic"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	//"github.com/Lortals/111cloudwego-apigateway/hertz-http-server/biz/model/api"
 )
 
 // Register .
