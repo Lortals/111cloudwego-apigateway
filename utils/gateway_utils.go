@@ -11,7 +11,7 @@ import (
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
-func GenerateClient(serviceName string) (genericclient.Client, error){
+func GenerateClient(serviceName string) (genericclient.Client, error) {
 
 	// inital declarations
 	var err error
@@ -20,7 +20,7 @@ func GenerateClient(serviceName string) (genericclient.Client, error){
 	lb := loadbalance.NewWeightedBalancer()
 
 	// initating etcs resolver (for service discovery)
-	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2379"})
+	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2370"})
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func jsonStringify(item any) (string, error) {
 	return string(jsonForm), nil
 }
 
-func MakeRpcRequest(ctx context.Context, kitexClient genericclient.Client, methodName string, request interface{}, response interface{}) (error) {
+func MakeRpcRequest(ctx context.Context, kitexClient genericclient.Client, methodName string, request interface{}, response interface{}) error {
 	stringedReq, err := jsonStringify(request)
 	if err != nil {
 		panic(err)
@@ -78,6 +78,6 @@ func MakeRpcRequest(ctx context.Context, kitexClient genericclient.Client, metho
 	return nil
 }
 
-func RunAllServices(){
-	
+func RunAllServices() {
+
 }

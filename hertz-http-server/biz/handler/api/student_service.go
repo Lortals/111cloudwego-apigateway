@@ -20,71 +20,14 @@ import (
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
-// Register .
-// @router /add-student-info [POST]
-func Register(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req demo.Student
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	//泛化调用的register
-	cli := initGenericClient()
-	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
-	if err != nil {
-		panic("get http req failed")
-	}
-	customReq, err := generic.FromHTTPRequest(httpReq)
-	if err != nil {
-		panic("get custom req failed")
-	}
-	resp, err := cli.GenericCall(ctx, "Register", customReq)
-	if err != nil {
-		panic("generic call failed" + err.Error())
-	}
-	c.JSON(consts.StatusOK, resp)
-}
-
-// Query .
-// @router /query [GET]
-func Query(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req demo.QueryReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	// 泛化调用的query
-	cli := initGenericClient()
-	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
-	if err != nil {
-		panic("get http req failed")
-	}
-	customReq, err := generic.FromHTTPRequest(httpReq)
-	if err != nil {
-		panic("get custom req failed")
-	}
-	resp, err := cli.GenericCall(ctx, "Query", customReq)
-	if err != nil {
-		panic("generic call failed" + err.Error())
-	}
-	realResp := resp.(*generic.HTTPResponse)
-	c.JSON(consts.StatusOK, realResp.Body)
-}
-
-// 泛化调用
+// 泛化调用功能
 func initGenericClient() genericclient.Client {
-	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2379"})
+	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2370"})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//基于内存解析 IDL，支持热更新
+	//解析 IDL，支持热更新功能
 	path := "../thrift-idl/gateway_api.thrift"
 	cont, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -121,4 +64,62 @@ func initGenericClient() genericclient.Client {
 	}
 
 	return cli
+}
+
+// Register .
+// @router /add-student-info [POST]
+func Register(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req demo.Student
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	//register的泛化调用
+	cli := initGenericClient()
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		panic("get http req failed")
+	}
+	customReq, err := generic.FromHTTPRequest(httpReq)
+	if err != nil {
+		panic("get custom req failed")
+	}
+	resp, err := cli.GenericCall(ctx, "Register", customReq)
+	if err != nil {
+		panic("generic call failed, the problem may be: " + err.Error())
+	}
+	c.JSON(consts.StatusOK, resp)
+}
+
+// Query .
+// @router /query [GET]
+func Query(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req demo.QueryReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	// 泛化调用的query
+	cli := initGenericClient()
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		panic("http req failed")
+	}
+	customReq, err := generic.FromHTTPRequest(httpReq)
+	if err != nil {
+		panic("custom req failed")
+	}
+	resp, err := cli.GenericCall(ctx, "Query", customReq)
+	if err != nil {
+		panic("generic call failed" + err.Error())
+	}
+	realResp := resp.(*generic.HTTPResponse)
+
+	c.JSON(consts.StatusOK, realResp.Body)
 }
