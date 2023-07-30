@@ -22,7 +22,7 @@ import (
 
 // 泛化调用功能
 func initGenericClient() genericclient.Client {
-	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2370"})
+	r, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2379"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -81,11 +81,11 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	cli := initGenericClient()
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
-		panic("get http req failed")
+		panic("http req failed")
 	}
 	customReq, err := generic.FromHTTPRequest(httpReq)
 	if err != nil {
-		panic("get custom req failed")
+		panic("custom req failed")
 	}
 	resp, err := cli.GenericCall(ctx, "Register", customReq)
 	if err != nil {
@@ -117,7 +117,7 @@ func Query(ctx context.Context, c *app.RequestContext) {
 	}
 	resp, err := cli.GenericCall(ctx, "Query", customReq)
 	if err != nil {
-		panic("generic call failed" + err.Error())
+		panic("generic call failed, the problem may be: " + err.Error())
 	}
 	realResp := resp.(*generic.HTTPResponse)
 
