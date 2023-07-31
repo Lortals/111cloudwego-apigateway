@@ -25,3 +25,13 @@ func _dividenumbersMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _registerMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _queryMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
