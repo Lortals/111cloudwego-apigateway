@@ -109,6 +109,16 @@ $ go run .
 
 > {"success":true,"message":"Information added successfully."}
 
+也可以直接用Linux的curl完成，示例：
+
+```
+curl -H "Content-Type:
+application/json" -X POST http://127.0.0.1:8080/add-student-info -d
+'{"id": 99, "name":"zhong", "sex":"male",
+"age":20, "college": {"name": "ee
+college", "address": "NJU"}, "email": ["211180179@smail.nju.edu.cn"]}'
+```
+
 **查询学生信息接口**
 请求地址
 
@@ -124,6 +134,13 @@ $ go run .
 > "sex":"male", "age":20, "college":
 > {"name": "ee college", "address":
 > "NJU"}}
+
+使用curl示例：
+
+```
+curl -H "Content-Type:
+application/json" -X GET http://127.0.0.1:8080/query?id=99
+```
 
 #### 微服务添加
 
