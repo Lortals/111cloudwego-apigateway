@@ -61,7 +61,7 @@ func Query(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp, err := cli.Query(context.Background(), &kapi.QueryReq{
-		Id: 100,
+		Id: req.ID,
 	})
 	if err != nil {
 		panic("err query:" + err.Error())
