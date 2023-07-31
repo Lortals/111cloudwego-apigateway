@@ -6,10 +6,11 @@ import (
 	"context"
 
 	api "github.com/Lortals/111cloudwego-apigateway/hzsvr-http/biz/model/api"
+	kapi "github.com/Lortals/111cloudwego-apigateway/rpc-services/student-service/kitex_gen/student/management"
+	"github.com/Lortals/111cloudwego-apigateway/rpc-services/student-service/kitex_gen/student/management/studentservice"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/adaptor"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/cloudwego/kitex/pkg/generic"
+	kclient "github.com/cloudwego/kitex/client"
 )
 
 // Register .
@@ -23,20 +24,22 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	cli := initGenericClient()
-	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	cli, err := studentservice.NewClient("student-server",
+		kclient.WithHostPorts("127.0.0.1:8889"))
 	if err != nil {
-		panic("get http req failed")
-	}
-	customReq, err := generic.FromHTTPRequest(httpReq)
-	if err != nil {
-		panic("get custom req failed")
-	}
-	resp, err := cli.GenericCall(ctx, "Register", customReq)
-	if err != nil {
-		panic("generic call failed" + err.Error())
+		panic("err init client" + err.Error())
 	}
 
+	resp, err := cli.Register(context.Background(),
+		&kapi.Student{
+			Id:   req.ID,
+			Name: req.Name,
+			College: &kapi.College{
+				Name:    req.College.Name,
+				Address: req.College.Address,
+			},
+			Email: req.Email,
+		})
 	c.JSON(consts.StatusOK, resp)
 }
 
@@ -51,21 +54,18 @@ func Query(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	// 泛化调用的query
-	cli := initGenericClient()
-	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	cli, err := studentservice.NewClient("student-server",
+		kclient.WithHostPorts("127.0.0.1:8889"))
 	if err != nil {
-		panic("get http req failed")
+		panic("err init client:" + err.Error())
 	}
-	customReq, err := generic.FromHTTPRequest(httpReq)
-	if err != nil {
-		panic("get custom req failed")
-	}
-	resp, err := cli.GenericCall(ctx, "Query", customReq)
-	if err != nil {
-		panic("generic call failed" + err.Error())
-	}
-	realResp := resp.(*generic.HTTPResponse)
 
-	c.JSON(consts.StatusOK, realResp.Body)
+	resp, err := cli.Query(context.Background(), &kapi.QueryReq{
+		Id: 100,
+	})
+	if err != nil {
+		panic("err query:" + err.Error())
+	}
+
+	c.JSON(consts.StatusOK, resp)
 }
