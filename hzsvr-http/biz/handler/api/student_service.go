@@ -23,7 +23,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	cli := utils.initGenericClient()
+	cli := initGenericClient()
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
 		panic("get http req failed")
@@ -52,7 +52,7 @@ func Query(ctx context.Context, c *app.RequestContext) {
 	}
 
 	// 泛化调用的query
-	cli := utils.initGenericClient()
+	cli := initGenericClient()
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
 		panic("get http req failed")

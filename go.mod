@@ -1,6 +1,6 @@
 module github.com/Lortals/111cloudwego-apigateway
 
-go 1.19
+go 1.20
 
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
