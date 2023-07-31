@@ -11,7 +11,7 @@ import (
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
-func GenerateClient(serviceName string) (genericclient.Client, error) {
+func GenerateClient(serviceName string, opts ...kitexClient.Option) (genericclient.Client, error) {
 
 	// inital declarations
 	var err error
@@ -26,7 +26,7 @@ func GenerateClient(serviceName string) (genericclient.Client, error) {
 	}
 
 	// importing idl for reference(generic call)
-	p, err := generic.NewThriftFileProvider("../thrift-idl/gateway_api.thrift")
+	p, err := generic.NewThriftFileProvider("../IDL-manage/gateway_api.thrift")
 	if err != nil {
 		panic(err)
 	}
@@ -37,12 +37,18 @@ func GenerateClient(serviceName string) (genericclient.Client, error) {
 		panic(err)
 	}
 
+	var options []kitexClient.Option
+	options = append(options,
+		kitexClient.WithResolver(r),
+		kitexClient.WithLoadBalancer(lb),
+	)
+	options = append(options, opts...)
+
 	// create new generic client
 	client, err := genericclient.NewClient(
 		serviceName,
 		g,
-		kitexClient.WithResolver(r),
-		kitexClient.WithLoadBalancer(lb),
+		options...,
 	)
 	if err != nil {
 		panic(err)
@@ -76,8 +82,4 @@ func MakeRpcRequest(ctx context.Context, kitexClient genericclient.Client, metho
 	json.Unmarshal([]byte(respRpc.(string)), response)
 
 	return nil
-}
-
-func RunAllServices() {
-
 }

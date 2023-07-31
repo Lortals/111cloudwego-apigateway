@@ -65,12 +65,12 @@ $ git clone https://github.com/Lortals/111cloudwego-apigateway.git
 #启动ectd
 $ etcd --log-level debug
 
-#运行hertz-http-server
-$ cd hertz-http-server
+#运行hzsvr-http
+$ cd hzsvr-http
 $ go run .
 
 #运行kitex
-$ cd microservices/student-service/
+$ cd rpc-services/student-service/
 $ go run .
 
 
