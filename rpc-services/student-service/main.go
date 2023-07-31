@@ -11,13 +11,6 @@ import (
 )
 
 func main() {
-	/*svr := management.NewServer(new(StudentServiceImpl))
-
-	err := svr.Run()
-
-	if err != nil {
-		log.Println(err.Error())
-	}*/
 	r, err := etcd.NewEtcdRegistry([]string{"127.0.0.1:2379"})
 	if err != nil {
 		log.Fatal(err)
@@ -28,7 +21,7 @@ func main() {
 		server.WithServiceAddr(addr),
 		server.WithRegistry(r),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-			ServiceName: "student"}))
+			ServiceName: "Student"}))
 
 	err = svr.Run()
 	if err != nil {
