@@ -1,12 +1,15 @@
 ### 系统部署
+
 ##### 系统环境
+
 > 系统环境 ubuntu-20.04-desktop-amd64
 > 系统配置 2核CPU 4G内存 40G硬盘
 > Go版本 1.20.6
 
-
 ##### 安装环境
+
 安装Go
+
 ```shell
 #下载go
 $ wget https://go.dev/dl/go1.20.6.linux-amd64.tar.gz
@@ -27,11 +30,15 @@ $ source /etc/profile
 $ go version
 
 ```
+
 安装Git
+
 ```shell
 $ sudo apt install git
 ```
+
 安装etcd
+
 ```shell
 # 下载
 $ wget https://github.com/etcd-io/etcd/releases/download/v3.4.27/etcd-v3.4.27-linux-amd64.tar.gz
@@ -43,24 +50,32 @@ $ tar zxf etcd-v3.4.27-linux-amd64.tar.gz
 $ cd etcd-v3.4.27-linux-amd64/
 $ cp -r etcd* /usr/local/bin/
 ```
+
 安装Hertz
+
 ```shell
 $ go install github.com/cloudwego/hertz/cmd/hz@latest
 ```
+
 安装Kitex
+
 ```shell
 $ go install github.com/cloudwego/kitex/tool/cmd/kitex@latest
 $ go install github.com/cloudwego/thriftgo@latest
 $ kitex --version
 $ thriftgo --version
 ```
+
 ##### 下载代码
+
 从github获取代码
+
 ```shell
 $ git clone https://github.com/Lortals/111cloudwego-apigateway.git
 ```
 
 ##### 运行项目
+
 ```shell
 #启动ectd
 $ etcd --log-level debug
@@ -77,35 +92,39 @@ $ go run .
 ```
 
 ##### 接口协议
+
 **学生注册接口**
 请求地址
-> POST http://127.0.0.1:8080/student/register
+
+> POST http://127.0.0.1:8080/add-student-info
 
 请求参数
-> name:Xiao Hong
-> age:18
-> email:xiaohong@tsinghua.edu.cn
-> address:Tsinghua University, 30 Shuangqing Road, Haidian District, Beijing 100084, China.
+
+> {"id": 99, "name":"zhong",
+> "sex":"male", "age":20, "college":
+> {"name": "ee college", "address":
+> "NJU"}}
 
 响应结果
-> {
->     "status": "success",
->     "id": "10001"
-> }
 
+> {"success":true,"message":"Information added successfully."}
 
 **查询学生信息接口**
 请求地址
-> POST http://127.0.0.1:8080/student/get
+
+> POST http://127.0.0.1:8080/query?id=99
 
 请求参数
-> id:10001
+
+> id=99
 
 响应结果
-> {
->     "name": "Xiao Hong",
->     "age": "18",
->     "email": "xiaohong@tsinghua.edu.cn",
->     "address": "Tsinghua University, 30 Shuangqing Road, Haidian District, Beijing 100084, China."
-> }
 
+> {"id": 99, "name":"zhong",
+> "sex":"male", "age":20, "college":
+> {"name": "ee college", "address":
+> "NJU"}}
+
+#### IDL更新
+
+在IDL-manage可以进行idl的更新，将更新的内容加入gateway_api.thrift文件中
